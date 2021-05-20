@@ -2,7 +2,7 @@ const { json } = require("express");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-
+const dbObj = require("./db/db.json");
 const app = express();
 const PORT = process.env.PORT || 1380;
 
@@ -13,8 +13,6 @@ getDb = () => {
   fs.readFileSync(path.join(__dirname, "/db/db.json"));
 };
 
-dbObj;
-
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/index.html"))
 );
@@ -24,18 +22,21 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  res.send(json(path.join(__dirname, "/db/db.json")));
+  console.log("response", path.join(__dirname, "./db/db.json"));
+  res.json(dbObj);
 });
 
 app.post("/api/notes", (req, res) => {
   const dbObj = require("./db/db.json");
+  console.log(dbObj);
   const newNote = req.body;
   newNote.id = dbObj.length > 0 ? dbObj[dbObj.length - 1].id + 1 : 1;
   dbObj.push(newNote);
   fs.writeFile("./db/db.json", JSON.stringify(dbObj), function (err) {
     if (err) throw err;
-    res.json(newNote);
+    console.log("note saved");
   });
+  res.send("newNote");
 });
 
 app.get("*", (req, res) => {
