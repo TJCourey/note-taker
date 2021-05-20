@@ -22,7 +22,7 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  console.log("response", path.join(__dirname, "./db/db.json"));
+  // console.log("response", path.join(__dirname, "./db/db.json"));
   res.json(dbObj);
 });
 
@@ -37,6 +37,19 @@ app.post("/api/notes", (req, res) => {
     console.log("note saved");
   });
   res.send("newNote");
+});
+
+app.delete("/api/notes/:id", (req, res) => {
+  const idNum = req.params.id;
+  console.log("idnum", idNum);
+  // const dbObj = require("./db/db.json");
+  console.log("dbobj", dbObj);
+  const newObj = dbObj.filter((item) => item.id != idNum);
+  fs.writeFile("./db/db.json", JSON.stringify(newObj), function (err) {
+    if (err) throw err;
+    console.log("note deleted");
+  });
+  res.send("newObj");
 });
 
 app.get("*", (req, res) => {
