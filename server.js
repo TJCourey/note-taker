@@ -41,9 +41,9 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
   const idNum = req.params.id;
-  console.log("idnum", idNum);
-  // const dbObj = require("./db/db.json");
-  console.log("dbobj", dbObj);
+  // console.log("idnum", idNum);
+  const dbObj = require("/db/db.json");
+  // console.log("dbobj", dbObj);
   const newObj = dbObj.filter((item) => item.id != idNum);
   fs.writeFile("./db/db.json", JSON.stringify(newObj), function (err) {
     if (err) throw err;
